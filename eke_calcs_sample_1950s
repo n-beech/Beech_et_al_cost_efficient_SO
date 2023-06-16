@@ -1,0 +1,43 @@
+#!/bin/bash
+#SBATCH -A ab0995
+#SBATCH -p compute
+#SBATCH -t 08:00:00
+#SBATCH -N 1
+#SBATCH -J eke_calcs
+#SBATCH -o ec_%j.out
+
+module load cdo
+
+cdo ymonmean -cat [ unod.fesom.1951.nc unod.fesom.1952.nc unod.fesom.1953.nc unod.fesom.1954.nc unod.fesom.1955.nc ] unod_monmean_1951-1955.nc &
+
+cdo ymonmean unod_1951-1955.nc unod_monmean_1951-1955.nc &
+
+cdo ymonmean -cat [ vnod.fesom.1951.nc vnod.fesom.1952.nc vnod.fesom.1953.nc vnod.fesom.1954.nc vnod.fesom.1955.nc ] vnod_monmean_1951-1955.nc &
+
+cdo ymonmean vnod_1951-1955.nc vnod_monmean_1951-1955.nc &
+
+wait
+
+cdo mulc,0.5 -add [ -sqr -ymonsub unod.fesom.1951.nc unod_monmean_1951-1955.nc  -sqr -ymonsub vnod.fesom.1951.nc vnod_monmean_1951-1955.nc ] eke_1951.nc &
+
+cdo mulc,0.5 -add [ -sqr -ymonsub unod.fesom.1952.nc unod_monmean_1951-1955.nc  -sqr -ymonsub vnod.fesom.1952.nc vnod_monmean_1951-1955.nc ] eke_1952.nc &
+
+cdo mulc,0.5 -add [ -sqr -ymonsub unod.fesom.1953.nc unod_monmean_1951-1955.nc  -sqr -ymonsub vnod.fesom.1953.nc vnod_monmean_1951-1955.nc ] eke_1953.nc &
+
+wait
+
+cdo mulc,0.5 -add [ -sqr -ymonsub unod.fesom.1954.nc unod_monmean_1951-1955.nc  -sqr -ymonsub vnod.fesom.1954.nc vnod_monmean_1951-1955.nc ] eke_1954.nc &
+
+cdo mulc,0.5 -add [ -sqr -ymonsub unod.fesom.1955.nc unod_monmean_1951-1955.nc  -sqr -ymonsub vnod.fesom.1955.nc vnod_monmean_1951-1955.nc ] eke_1955.nc &
+
+wait
+
+cdo timselmean,5 -del29feb eke_1951.nc eke_5d_nol_1951.nc &
+cdo timselmean,5 -del29feb eke_1952.nc eke_5d_nol_1952.nc &
+cdo timselmean,5 -del29feb eke_1953.nc eke_5d_nol_1953.nc &
+cdo timselmean,5 -del29feb eke_1954.nc eke_5d_nol_1954.nc &
+cdo timselmean,5 -del29feb eke_1955.nc eke_5d_nol_1955.nc &
+
+wait
+
+cdo timmean -cat [ eke_1951.nc eke_1952.nc eke_1953.nc eke_1954.nc eke_1955.nc ] eke_mean_1951-1955.nc 
