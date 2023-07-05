@@ -8,13 +8,9 @@
 
 module load cdo
 
-cdo ymonmean -cat [ unod.fesom.1951.nc unod.fesom.1952.nc unod.fesom.1953.nc unod.fesom.1954.nc unod.fesom.1955.nc ] unod_monmean_1951-1955.nc &
+cdo ymonmean -copy [ unod.fesom.1951.nc unod.fesom.1952.nc unod.fesom.1953.nc unod.fesom.1954.nc unod.fesom.1955.nc ] unod_monmean_1951-1955.nc &
 
-cdo ymonmean unod_1951-1955.nc unod_monmean_1951-1955.nc &
-
-cdo ymonmean -cat [ vnod.fesom.1951.nc vnod.fesom.1952.nc vnod.fesom.1953.nc vnod.fesom.1954.nc vnod.fesom.1955.nc ] vnod_monmean_1951-1955.nc &
-
-cdo ymonmean vnod_1951-1955.nc vnod_monmean_1951-1955.nc &
+cdo ymonmean -copy [ vnod.fesom.1951.nc vnod.fesom.1952.nc vnod.fesom.1953.nc vnod.fesom.1954.nc vnod.fesom.1955.nc ] vnod_monmean_1951-1955.nc &
 
 wait
 
